@@ -38,7 +38,7 @@ const generateHmacSignature = (params) => {
 
 
 app.post('/createTransaction', async (req, res) => {
-    const { amount, currency1, currency2, buyerEmail } = req.body;
+    const { amount, currency1, currency2, buyerEmail, customOrderId } = req.body;
     const params = {
         key: API_KEY,
         version: 1,
@@ -47,7 +47,8 @@ app.post('/createTransaction', async (req, res) => {
         currency1: currency1,    // Currency to convert from (e.g., USD)
         currency2: currency2,    // Cryptocurrency to receive (e.g., BTC)
         buyer_email: buyerEmail, // Buyer's email
-        ipn_url: 'https://webhook.site/1940a23c-e56a-478d-acb8-c0f371c1768c', // Optional: IPN URL for callback
+        ipn_url: 'https://webhook.site/18ed365b-509f-4d58-bb44-d002b5610a22', // Optional: IPN URL for callback
+        custom: customOrderId
     };
 
     // Generate the HMAC signature
@@ -128,3 +129,25 @@ app.get('/getSupportedCoins', async (req, res) => {
 
 // Call the function to get supported coins
 // getSupportedCoins();
+
+app.post('/storeJSON', async (req, res) => {
+    const { jsonData } = req.body;
+    // Dynamically import Helia modules
+    const { createHelia } = await import('helia')
+    const { strings } = await import('@helia/strings')
+
+    try {
+        const helia = await createHelia()
+        const s = strings(helia)
+
+        const myImmutableAddress = await s.add(JSON.stringify(jsonData))
+        //console.log(await s.get(myImmutableAddress))  // Output: 'hello world'
+        const _resp = 'https://ipfs.io/ipfs/' + myImmutableAddress.toString();
+        return res.send({ url: _resp });
+    } catch (error) {
+        console.error('Error setting up Helia:', error)
+        return res.send('Error setting up Helia:', error);
+    }
+})
+
+
