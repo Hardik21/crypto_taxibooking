@@ -129,25 +129,16 @@ app.get('/getSupportedCoins', async (req, res) => {
 
 // Call the function to get supported coins
 // getSupportedCoins();
+const pinataSDK = require('@pinata/sdk');
 
 app.post('/storeJSON', async (req, res) => {
-    const { jsonData } = req.body;
-    // Dynamically import Helia modules
-    const { createHelia } = await import('helia')
-    const { strings } = await import('@helia/strings')
+    const jsonData = req.body;
+    const pinata = new pinataSDK('8a653703e62ec8cb9a6a', '13a0328e7804600ee9fe84cf60e813e93add2f9efd1e81d4e3946bc3ea253c93');
 
     try {
-        const helia = await createHelia()
-        const s = strings(helia)
-
-        const myImmutableAddress = await s.add(JSON.stringify(jsonData))
-        //console.log(await s.get(myImmutableAddress))  // Output: 'hello world'
-        const _resp = 'https://ipfs.io/ipfs/' + myImmutableAddress.toString();
-        return res.send({ url: _resp });
+        const result = await pinata.pinJSONToIPFS(jsonData);
+        res.send({ daat: 'https://moccasin-many-turtle-335.mypinata.cloud/ipfs/' + result.IpfsHash });
     } catch (error) {
         console.error('Error setting up Helia:', error)
-        return res.send('Error setting up Helia:', error);
     }
 })
-
-
