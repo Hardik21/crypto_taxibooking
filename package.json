@@ -9,13 +9,17 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "pm2": "^5.4.2",
+    "@helia/strings": "^4.0.0",
+    "@helia/unixfs": "^4.0.0",
     "@pinata/sdk": "^2.1.0",
     "axios": "^1.7.7",
     "body-parser": "^1.20.3",
     "crypto": "^1.0.1",
     "express": "^4.21.1",
     "helia": "^5.1.0",
-    "ipfs-http-client": "^60.0.1"
+    "ipfs-http-client": "^60.0.1",
+    "pdfkit": "^0.15.0",
+    "pinata": "^1.7.2",
+    "pm2": "^5.4.2"
   }
 }
